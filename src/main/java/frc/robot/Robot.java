@@ -4,6 +4,11 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 /**
@@ -13,42 +18,58 @@ import edu.wpi.first.wpilibj.TimedRobot;
  * project.
  */
 public class Robot extends TimedRobot {
-  
-  @Override
-  public void robotInit() {
-    
-  }
+    private Joystick joystick;
+    private TalonSRX motor;
 
-  @Override
-  public void robotPeriodic() {}
+    @Override
+    public void robotInit() {
+        joystick = new Joystick(0);
+        motor = new TalonSRX(0);
 
-  @Override
-  public void autonomousInit() {}
+        motor.set(ControlMode.PercentOutput, 0);
+        motor.setNeutralMode(NeutralMode.Brake);
 
-  @Override
-  public void autonomousPeriodic() {}
+    }
 
-  @Override
-  public void teleopInit() {}
+    @Override
+    public void robotPeriodic() {
+        if(joystick.getRawButtonPressed(1)) {
+            motor.set(ControlMode.PercentOutput, 0.3);
+        } else if (joystick.getRawButtonPressed(2)) {
+            motor.set(ControlMode.PercentOutput, -0.3);
+        } else {
+            motor.set(ControlMode.PercentOutput, 0);
+        }
+        
+    }
 
-  @Override
-  public void teleopPeriodic() {}
+    @Override
+    public void autonomousInit() {}
 
-  @Override
-  public void disabledInit() {}
+    @Override
+    public void autonomousPeriodic() {}
 
-  @Override
-  public void disabledPeriodic() {}
+    @Override
+    public void teleopInit() {}
 
-  @Override
-  public void testInit() {}
+    @Override
+    public void teleopPeriodic() {}
 
-  @Override
-  public void testPeriodic() {}
+    @Override
+    public void disabledInit() {}
 
-  @Override
-  public void simulationInit() {}
+    @Override
+    public void disabledPeriodic() {}
 
-  @Override
-  public void simulationPeriodic() {}
-}
+    @Override
+    public void testInit() {}
+
+    @Override
+    public void testPeriodic() {}
+
+    @Override
+    public void simulationInit() {}
+
+    @Override
+    public void simulationPeriodic() {}
+    }
