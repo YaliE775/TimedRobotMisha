@@ -40,6 +40,9 @@ public class Robot extends TimedRobot {
         } else {
             motor.set(ControlMode.PercentOutput, 0);
         }
+
+        
+        motor.set(ControlMode.PercentOutput, joystick.getRawAxis(3) * 0.5);
         
     }
 
