@@ -36,8 +36,8 @@ public class Robot extends TimedRobot {
         rightSlave = new TalonSRX(3);
         leftSlave = new TalonSRX(1);
 
-        leftMaster.setInverted(true);
-        leftSlave.setInverted(true);
+        rightMaster.setInverted(true);
+        rightSlave.setInverted(true);
 
         rightSlave.follow(rightMaster);
         leftSlave.follow(leftMaster);
@@ -50,9 +50,45 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
-        rightMaster.set(ControlMode.PercentOutput, driverJoystick.getRawAxis(3) * 0.5);
-        leftMaster.set(ControlMode.PercentOutput, driverJoystick.getRawAxis(1) * 0.5);
+        double x = driverJoystick.getRawAxis(0);
+        double y = driverJoystick.getRawAxis(3);
+        
+        arcadeDrive(x, y);
+
     }
+
+    public void arcadeDrive(double x, double y) {
+        x = Math.max(-0.9, Math.min(0.9, x));
+        double max = Math.max(Math.abs(x), Math.abs(y));
+
+        double total = x + y;
+        double difference = y - x;
+
+        if(y >= 0) {
+            if(x >= 0) {
+                leftMaster.set(ControlMode.PercentOutput, max);
+                rightMaster.set(ControlMode.PercentOutput, difference);
+            } else {
+                leftMaster.set(ControlMode.PercentOutput, total);
+                rightMaster.set(ControlMode.PercentOutput, max);
+            }
+        } else {
+            if(x >= 0) {
+                leftMaster.set(ControlMode.PercentOutput, total);
+                rightMaster.set(ControlMode.PercentOutput, -max);
+            } else {
+                leftMaster.set(ControlMode.PercentOutput, -max);
+                rightMaster.set(ControlMode.PercentOutput, difference);
+            }
+        }
+
+        System.out.println("right: " + rightMaster.getMotorOutputPercent());
+        System.out.println("left: " + leftMaster.getMotorOutputPercent());
+
+        System.out.println("y: " + y);
+        System.out.println("x: " + x);
+    }
+    
 
     @Override
     public void autonomousInit() {}
