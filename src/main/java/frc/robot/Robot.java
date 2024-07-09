@@ -4,6 +4,12 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 /**
@@ -13,42 +19,68 @@ import edu.wpi.first.wpilibj.TimedRobot;
  * project.
  */
 public class Robot extends TimedRobot {
-  
-  @Override
-  public void robotInit() {
+    private Joystick driverJoystick;
     
-  }
+    private TalonSRX rightMaster;
+    private TalonSRX leftMaster;
 
-  @Override
-  public void robotPeriodic() {}
+    private TalonSRX rightSlave;
+    private TalonSRX leftSlave;
 
-  @Override
-  public void autonomousInit() {}
+    @Override
+    public void robotInit() {
+        driverJoystick = new Joystick(0);
+        rightMaster = new TalonSRX(4);
+        leftMaster = new TalonSRX(2);
 
-  @Override
-  public void autonomousPeriodic() {}
+        rightSlave = new TalonSRX(3);
+        leftSlave = new TalonSRX(1);
 
-  @Override
-  public void teleopInit() {}
+        leftMaster.setInverted(true);
+        leftSlave.setInverted(true);
 
-  @Override
-  public void teleopPeriodic() {}
+        rightSlave.follow(rightMaster);
+        leftSlave.follow(leftMaster);
 
-  @Override
-  public void disabledInit() {}
+        rightMaster.setNeutralMode(NeutralMode.Brake);
+        rightSlave.setNeutralMode(NeutralMode.Brake);
+        leftMaster.setNeutralMode(NeutralMode.Brake);
+        leftSlave.setNeutralMode(NeutralMode.Brake);
+    }
 
-  @Override
-  public void disabledPeriodic() {}
+    @Override
+    public void robotPeriodic() {
+        rightMaster.set(ControlMode.PercentOutput, driverJoystick.getRawAxis(3) * 0.5);
+        leftMaster.set(ControlMode.PercentOutput, driverJoystick.getRawAxis(1) * 0.5);
+    }
 
-  @Override
-  public void testInit() {}
+    @Override
+    public void autonomousInit() {}
 
-  @Override
-  public void testPeriodic() {}
+    @Override
+    public void autonomousPeriodic() {}
 
-  @Override
-  public void simulationInit() {}
+    @Override
+    public void teleopInit() {}
 
-  @Override
-  public void simulationPeriodic() {}
+    @Override
+    public void teleopPeriodic() {}
+
+    @Override
+    public void disabledInit() {}
+
+    @Override
+    public void disabledPeriodic() {}
+
+    @Override
+    public void testInit() {}
+
+    @Override
+    public void testPeriodic() {}
+
+    @Override
+    public void simulationInit() {}
+
+    @Override
+    public void simulationPeriodic() {}
 }
