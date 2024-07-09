@@ -24,7 +24,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         joystick = new Joystick(0);
-        motor = new TalonSRX(0);
+        motor = new TalonSRX(1);
 
         motor.set(ControlMode.PercentOutput, 0);
         motor.setNeutralMode(NeutralMode.Brake);
@@ -33,16 +33,16 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
-        if(joystick.getRawButtonPressed(1)) {
+        if(joystick.getRawButton(1)) {
             motor.set(ControlMode.PercentOutput, 0.3);
-        } else if (joystick.getRawButtonPressed(2)) {
+        } else if (joystick.getRawButton(2)) {
             motor.set(ControlMode.PercentOutput, -0.3);
         } else {
-            motor.set(ControlMode.PercentOutput, 0);
+            motor.set(ControlMode.PercentOutput, joystick.getRawAxis(3) * 0.5);
         }
 
         
-        motor.set(ControlMode.PercentOutput, joystick.getRawAxis(3) * 0.5);
+
         
     }
 
