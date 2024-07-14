@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -13,42 +14,47 @@ import edu.wpi.first.wpilibj.TimedRobot;
  * project.
  */
 public class Robot extends TimedRobot {
-  
-  @Override
-  public void robotInit() {
-    
-  }
 
-  @Override
-  public void robotPeriodic() {}
+    double testNum;
+    @Override
+    public void robotInit() {
+        SmartDashboard.putNumber("Sigma Number", 3);
 
-  @Override
-  public void autonomousInit() {}
+       testNum = SmartDashboard.getNumber("Sigma Number", 0);
+       System.out.println(testNum);
+    }
 
-  @Override
-  public void autonomousPeriodic() {}
+    @Override
+    public void robotPeriodic() {}
 
-  @Override
-  public void teleopInit() {}
+    @Override
+    public void autonomousInit() {}
 
-  @Override
-  public void teleopPeriodic() {}
+    @Override
+    public void autonomousPeriodic() {}
 
-  @Override
-  public void disabledInit() {}
+    @Override
+    public void teleopInit() {}
 
-  @Override
-  public void disabledPeriodic() {}
+    @Override
+    public void teleopPeriodic() {}
 
-  @Override
-  public void testInit() {}
+    @Override
+    public void disabledInit() {}
 
-  @Override
-  public void testPeriodic() {}
+    @Override
+    public void disabledPeriodic() {}
 
-  @Override
-  public void simulationInit() {}
+    @Override
+    public void testInit() {}
 
-  @Override
-  public void simulationPeriodic() {}
+    @Override
+    public void testPeriodic() {}
+
+    @Override
+    public void simulationInit() {}
+
+    @Override
+    public void simulationPeriodic() {}
+
 }
