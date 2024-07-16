@@ -4,7 +4,14 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -13,42 +20,83 @@ import edu.wpi.first.wpilibj.TimedRobot;
  * project.
  */
 public class Robot extends TimedRobot {
-  
-  @Override
-  public void robotInit() {
-    
-  }
 
-  @Override
-  public void robotPeriodic() {}
+    private DigitalInput beamBreakerIn;
+    private DigitalOutput beamBreakerOut;
 
-  @Override
-  public void autonomousInit() {}
+    private TalonSRX rightMaster;
+    private TalonSRX leftMaster;
 
-  @Override
-  public void autonomousPeriodic() {}
+    private TalonSRX rightSlave;
+    private TalonSRX leftSlave;
 
-  @Override
-  public void teleopInit() {}
+    @Override
+    public void robotInit() {
+        beamBreakerIn = new DigitalInput(1);
+        beamBreakerOut = new DigitalOutput(0);
 
-  @Override
-  public void teleopPeriodic() {}
+        beamBreakerOut.set(true);
 
-  @Override
-  public void disabledInit() {}
+        rightMaster = new TalonSRX(4);
+        leftMaster = new TalonSRX(2);
 
-  @Override
-  public void disabledPeriodic() {}
+        rightSlave = new TalonSRX(3);
+        leftSlave = new TalonSRX(1);
 
-  @Override
-  public void testInit() {}
+        leftMaster.setInverted(true);
+        leftSlave.setInverted(true);
 
-  @Override
-  public void testPeriodic() {}
+        rightSlave.follow(rightMaster);
+        leftSlave.follow(leftMaster);
 
-  @Override
-  public void simulationInit() {}
+        rightMaster.setNeutralMode(NeutralMode.Brake);
+        rightSlave.setNeutralMode(NeutralMode.Brake);
+        leftMaster.setNeutralMode(NeutralMode.Brake);
+        leftSlave.setNeutralMode(NeutralMode.Brake);
+        
+    }
 
-  @Override
-  public void simulationPeriodic() {}
+    @Override
+    public void robotPeriodic() {
+        SmartDashboard.putBoolean("Beam Breaker", beamBreakerIn.get());
+    }
+
+    @Override
+    public void autonomousInit() {}
+
+    @Override
+    public void autonomousPeriodic() {}
+
+    @Override
+    public void teleopInit() {}
+
+    @Override
+    public void teleopPeriodic() {
+        if (!beamBreakerIn.get()) {
+            rightMaster.set(ControlMode.PercentOutput, 0.3);
+            leftMaster.set(ControlMode.PercentOutput, 0.3);
+        } else {
+            rightMaster.set(ControlMode.PercentOutput, 0);
+            leftMaster.set(ControlMode.PercentOutput, 0);
+        }
+        
+    }
+
+    @Override
+    public void disabledInit() {}
+
+    @Override
+    public void disabledPeriodic() {}
+
+    @Override
+    public void testInit() {}
+
+    @Override
+    public void testPeriodic() {}
+
+    @Override
+    public void simulationInit() {}
+
+    @Override
+    public void simulationPeriodic() {}
 }
