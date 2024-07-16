@@ -4,6 +4,12 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix6.hardware.TalonFX;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -15,17 +21,44 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends TimedRobot {
 
-    double testNum;
+    private double kP;
+    private double kI;
+    private double kD;
+    private double setPoint;
+
+    private TalonSRX motor;
+
     @Override
     public void robotInit() {
-        SmartDashboard.putNumber("Sigma Number", 3);
+        motor = new TalonSRX(3);
 
-       testNum = SmartDashboard.getNumber("Sigma Number", 0);
-       System.out.println(testNum);
+        SmartDashboard.putNumber("Kp", 1);
+        SmartDashboard.putNumber("Ki", 0);
+        SmartDashboard.putNumber("Kd", 0);
+        SmartDashboard.putNumber("setPoint", 0);
+
+        motor.configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor1);
+        
     }
 
     @Override
-    public void robotPeriodic() {}
+    public void robotPeriodic() {
+        kP = SmartDashboard.getNumber("Kp", 0);
+        kD = SmartDashboard.getNumber("Ki", 0);
+        kI = SmartDashboard.getNumber("Kd", 0);
+        setPoint = SmartDashboard.getNumber("setPoint", 0);
+
+        motor.config_kP(0, kP);
+        motor.config_kI(0, kI);
+        motor.config_kD(0, kD);
+
+        System.out.println("Kp: " + kP);
+        System.out.println("Kd " + kI);
+        System.out.println(kD);
+        System.out.println(setPoint);
+
+        
+    }
 
     @Override
     public void autonomousInit() {}
@@ -37,7 +70,11 @@ public class Robot extends TimedRobot {
     public void teleopInit() {}
 
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+        motor.set(ControlMode.Position, 100);
+        System.out.println("postion: " + motor.getSelectedSensorPosition());
+        
+    }
 
     @Override
     public void disabledInit() {}
