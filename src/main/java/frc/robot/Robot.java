@@ -21,13 +21,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends TimedRobot {
-
+    private TalonSRX motor;
+    
+    private double setPoint;
     private double kP;
     private double kI;
     private double kD;
-    private double setPoint;
-
-    private TalonSRX motor;
 
     @Override
     public void robotInit() {
@@ -37,6 +36,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Ki", 0);
         SmartDashboard.putNumber("Kd", 0);
         SmartDashboard.putNumber("setPoint", 0);
+
         motor.setSelectedSensorPosition(0);
         motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
 
@@ -51,19 +51,11 @@ public class Robot extends TimedRobot {
         kI = SmartDashboard.getNumber("Kd", 0);
         setPoint = SmartDashboard.getNumber("setPoint", 0);
 
-        // motor.selectProfileSlot(0, 0);
-
-
         motor.config_kP(0, kP);
         motor.config_kI(0, kI);
         motor.config_kD(0, kD);
 
-        System.out.println("Kp: " + kP);
-        System.out.println("Kd " + kI);
-        System.out.println(kD);
-        System.out.println(setPoint);
 
-        
     }
 
     @Override
@@ -73,12 +65,10 @@ public class Robot extends TimedRobot {
     public void autonomousPeriodic() {}
 
     @Override
-    public void teleopInit() {
-    }
+    public void teleopInit() {}
 
     @Override
     public void teleopPeriodic() {
-        
         motor.set(ControlMode.Position, setPoint);
         System.out.println("postion: " + motor.getSelectedSensorPosition());
         
