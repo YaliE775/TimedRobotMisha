@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -30,14 +31,16 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        motor = new TalonSRX(3);
+        motor = new TalonSRX(2);
 
         SmartDashboard.putNumber("Kp", 1);
         SmartDashboard.putNumber("Ki", 0);
         SmartDashboard.putNumber("Kd", 0);
         SmartDashboard.putNumber("setPoint", 0);
+        motor.setSelectedSensorPosition(0);
+        motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
 
-        motor.configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor1);
+        motor.setSensorPhase(true);
         
     }
 
@@ -47,6 +50,9 @@ public class Robot extends TimedRobot {
         kD = SmartDashboard.getNumber("Ki", 0);
         kI = SmartDashboard.getNumber("Kd", 0);
         setPoint = SmartDashboard.getNumber("setPoint", 0);
+
+        // motor.selectProfileSlot(0, 0);
+
 
         motor.config_kP(0, kP);
         motor.config_kI(0, kI);
@@ -67,11 +73,13 @@ public class Robot extends TimedRobot {
     public void autonomousPeriodic() {}
 
     @Override
-    public void teleopInit() {}
+    public void teleopInit() {
+    }
 
     @Override
     public void teleopPeriodic() {
-        motor.set(ControlMode.Position, 100);
+        
+        motor.set(ControlMode.Position, setPoint);
         System.out.println("postion: " + motor.getSelectedSensorPosition());
         
     }
