@@ -7,6 +7,7 @@ package frc.robot;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -47,8 +48,11 @@ public class Robot extends TimedRobot {
             .withKP(kP)
             .withKI(kI)
             .withKD(kD);
-
+            
         motor.getConfigurator().apply(configs);
+        
+        motor.setNeutralMode(NeutralModeValue.Brake);
+        motor.setInverted(false);
 
     }
 
